@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compagnie Dolly - 212th Attack Battalion</title>
+    <style>
+        :root {
+            --bg-color: #0b0b0b;
+            --card-bg: rgba(18, 18, 18, 0.85);
+            --card-border: rgba(255, 102, 0, 0.3);
+            --orange-primary: #ff6600;
+            --orange-hover: #ff8533;
+            --text-main: #f0f0f0;
+            --text-muted: #cccccc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Corps avec image de fond Star Wars / 212th / Médics */
+        body {
+            background: linear-gradient(rgba(11, 11, 11, 0.9), rgba(11, 11, 11, 0.95)), 
+                        url('https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        header {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-bottom: 2px solid var(--orange-primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--orange-primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav button:hover {
+            color: var(--text-main);
+            background-color: rgba(255, 102, 0, 0.15);
+            border-color: rgba(255, 102, 0, 0.4);
+        }
+
+        nav button.active {
+            color: #ffffff;
+            background-color: var(--orange-primary);
+            border-color: var(--orange-primary);
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        main {
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .page-section.active-page {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: #ffffff;
+            text-transform: uppercase;
+            border-left: 5px solid var(--orange-primary);
+            padding-left: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        /* Style Grille Armement avec images réelles */
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .equipment-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .equipment-card:hover {
+            border-color: var(--orange-primary);
+            transform: translateY(-4px);
+        }
+
+        .equipment-img-container {
+            background-color: rgba(10, 10, 10, 0.6);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--card-border);
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .equipment-img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255,102,0,0.2));
+        }
+
+        .equipment-info {
+            padding: 20px;
+        }
+
+        .equipment-info h3 {
+            color: var(--orange-primary);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Style des Médailles avec icônes */
+        .medal-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-left: 4px solid var(--orange-primary);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .medal-icon {
+            font-size: 2.5rem;
+            background: rgba(255, 102, 0, 0.1);
+            border: 1px solid var(--orange-primary);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .medal-content h3 {
+            color: var(--orange-primary);
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* Style Dirigeant */
+        .leader-card {
+            background: linear-gradient(135deg, rgba(26,26,26,0.9), rgba(34,21,13,0.9));
+            border: 1px solid var(--orange-primary);
+            border-radius: 8px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.2);
+        }
+
+        .leader-avatar {
+            font-size: 3.5rem;
+            background: rgba(255, 102, 0, 0.15);
+            border: 2px solid var(--orange-primary);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: center;
+        }
+
+        .leader-details h3 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .leader-details .badge-rank {
+            color: var(--orange-primary);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: rgba(10, 10, 10, 0.95);
+        }
+
+        @media (max-width: 768px) {
+            .equipment-grid {
+                grid-template-columns: 1fr;
+            }
+            .leader-card, .medal-item {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo-title">212th — Compagnie Dolly</div>
+            <nav>
+                <ul>
+                    <li><button class="nav-btn active" onclick="switchPage('accueil', event)">Accueil</button></li>
+                    <li><button class="nav-btn" onclick="switchPage('presentation', event)">Présentation</button></li>
+                    <li><button class="nav-btn" onclick="switchPage('specialisations', event)">Spécialisations</button></li>
+                    <li><button class="nav-btn" onclick="switchPage('armement', event)">Armement</button></li>
+                    <li><button class="nav-btn" onclick="switchPage('dirigeant', event)">Dirigeant</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- PAGE 1 : ACCUEIL -->
+        <section id="accueil" class="page-section active-page">
+            <h1>Compagnie Dolly</h1>
+            <p>Bienvenue sur le portail sécurisé de la <strong>Compagnie Dolly</strong>, unité spécialisée et d'élite rattachée au 212e Bataillon d'attaque.</p>
+            <p>Ce portail centralise l'ensemble des documents opérationnels, des dotations en armement, des protocoles médicaux ainsi que la structure de commandement en vigueur sur le terrain.</p>
+            <div style="margin-top: 30px; padding: 25px; background: var(--card-bg); border-left: 4px solid var(--orange-primary); border-radius: 0 8px 8px 0; backdrop-filter: blur(8px);">
+                <h3 style="color: var(--orange-primary); margin-bottom: 10px; text-transform: uppercase;">Devise de l'unité</h3>
+                <p style="font-style: italic; color: #fff; margin: 0; font-size: 1.2rem;">« Pro Patria Vigilet »</p>
+            </div>
+        </section>
+
+        <!-- PAGE 2 : PRÉSENTATION -->
+        <section id="presentation" class="page-section">
+            <h1>Présentation de la compagnie</h1>
+            <p style="font-size: 1.15rem; color: #fff;">La Compagnie Dolly s'impose comme un pilier tactique et sanitaire indispensable au sein du 212e Bataillon d'attaque. Conçue pour opérer dans les environnements les plus hostiles et sous un feu ennemi nourri, l'unité combine une force de frappe rigoureuse et une excellence médicale sans faille sur le front.</p>
+            <p>Nos soldats sont sélectionnés et formés selon des critères drastiques. Chaque membre de la compagnie maîtrise non seulement l'art du combat aux côtés des forces du maréchal commander Cody et du général Obi-Wan Kenobi, mais également les techniques de sauvetage d'urgence avancées pour préserver les vies de nos frères d'armes.</p>
+            <div style="margin-top: 25px; background: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--card-border);">
+                <h3 style="color: var(--orange-primary); margin-bottom: 10px; text-transform: uppercase;">Doctrine &amp; Engagements</h3>
+                <p style="margin: 0;">La doctrine de la compagnie repose sur la réactivité, la cohésion absolue et le dévouement total. En application stricte du principe de <strong>Pro Patria Vigilet</strong>, la compagnie maintient une veille permanente et une capacité d'intervention immédiate, peu importe l'ampleur de la menace séparatiste.</p>
+            </div>
+        </section>
+
+        <!-- PAGE 3 : SPÉCIALISATIONS & MÉDAILLES -->
+        <section id="specialisations" class="page-section">
+            <h1>Spécialisations &amp; Médailles</h1>
+            <p>L'expertise de la Compagnie Dolly repose sur des rôles spécialisés et des décorations internes récompensant l'exemplarité des troupes :</p>
+            
+            <h2 style="font-size: 1.5rem; color: var(--orange-primary); margin: 30px 0 20px 0; border-left: none; padding-left: 0;">Décorations &amp; Médailles Internes</h2>
+
+            <!-- Médaille 1 -->
+            <div class="medal-item">
+                <div class="medal-icon">💊</div>
+                <div class="medal-content">
+                    <h3>Médaille du Bacta</h3>
+                    <p style="margin: 0; color: var(--text-muted);">Décernée aux Médecins ayant su démontrer des compétences médicales hors pair et une efficacité chirurgicale sur le terrain sous haute tension.</p>
+                </div>
+            </div>
+
+            <!-- Médaille 2 -->
+            <div class="medal-item">
+                <div class="medal-icon">🛡️</div>
+                <div class="medal-content">
+                    <h3>Médaille de l'ange de Kamino</h3>
+                    <p style="margin: 0; color: var(--text-muted);">Attribuée aux personnels médicaux ayant fait preuve d'une constance et d'un investissement exemplaires au sein de l'Ordre Médical.</p>
+                </div>
+            </div>
+
+            <!-- Médaille 3 -->
+            <div class="medal-item">
+                <div class="medal-icon">⭐</div>
+                <div class="medal-content">
+                    <h3>Médaille du Soin Interstellaire</h3>
+                    <p style="margin: 0; color: var(--text-muted);">La plus haute distinction honorifique, obtenue par l'élément s'étant le plus démarqué et ayant transcendé les limites de l'unité.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4 : ARMEMENT À DISPOSITION -->
+        <section id="armement" class="page-section">
+            <h1>Armement à disposition</h1>
+            <p>Inventaire officiel des équipements et armements tactiques alloués aux forces de la Compagnie Dolly :</p>
+            
+            <div class="equipment-grid">
+                <!-- Arme 1 -->
+                <div class="equipment-card">
+                    <div class="equipment-img-container">
+                        <img src="https://i.imgur.com/8QjZ12a.png" alt="DC-15a MK-3" onerror="this.src='https://images.unsplash.com/photo-1595590424283-b8f17842773f?auto=format&fit=crop&w=400&q=80';">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>DC-15a MK-3</h3>
+                        <p>Fusil blaster lourd de précision pour l'appui-feu longue distance et la couverture tactique.</p>
+                    </div>
+                </div>
+
+                <!-- Arme 2 -->
+                <div class="equipment-card">
+                    <div class="equipment-img-container">
+                        <img src="https://i.imgur.com/9vK3Z3x.png" alt="Grappin" onerror="this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=400&q=80';">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>Grappin Tactique</h3>
+                        <p>Dispositif d'ancrage magnétique haute résistance pour l'escalade rapide et l'abordage.</p>
+                    </div>
+                </div>
+
+                <!-- Arme 3 -->
+                <div class="equipment-card">
+                    <div class="equipment-img-container">
+                        <img src="https://i.imgur.com/4bL2Z5y.png" alt="DC-15s" onerror="this.src='https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80';">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>DC-15s</h3>
+                        <p>Blaster compact polyvalent, idéal pour la mobilité en milieu urbain et les combats rapprochés.</p>
+                    </div>
+                </div>
+
+                <!-- Arme 4 -->
+                <div class="equipment-card">
+                    <div class="equipment-img-container">
+                        <img src="https://i.imgur.com/1mN6Z8w.png" alt="DC-17" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';">
+                    </div>
+                    <div class="equipment-info">
+                        <h3>DC-17</h3>
+                        <p>Pistolet blaster lourd double, offrant une puissance de feu secondaire redoutable en situation critique.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5 : DIRIGEANT -->
+        <section id="dirigeant" class="page-section">
+            <h1>Dirigeant Actuel</h1>
+            <p>Commandement suprême et supervision opérationnelle de la Compagnie Dolly.</p>
+            
+            <div class="leader-card">
+                <div class="leader-avatar">👑</div>
+                <div class="leader-details">
+                    <h3>1961 Chrome</h3>
+                    <span class="badge-rank">Leader de la Compagnie Dolly (Airo)</span>
+                    <p>En charge de la direction générale, des directives stratégiques et de l'autorité suprême sur l'ensemble des effectifs, des spécialisations et des protocoles de la compagnie.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 212th Attack Battalion — Compagnie Dolly. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        function switchPage(pageId, event) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.resovet ? section.classList.remove('active-page') : section.classList.remove('active-page');
+            });
+
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const targetSection = document.getElementById(pageId);
+            if (targetSection) {
+                targetSection.classList.add('active-page');
+            }
+
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
